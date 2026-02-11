@@ -19,24 +19,34 @@ const Room = ({ user }) => {
             orderBy('createdAt', 'asc')
         );
 
+        const msgSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const msgs = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
+
+            // Play sound if new message exists and tab is hidden
+            if (!snapshot.metadata.hasPendingWrites && snapshot.docChanges().some(c => c.type === 'added')) {
+                if (document.hidden) {
+                    msgSound.play().catch(e => console.log("Sound play failed", e));
+                }
+            }
             setMessages(msgs);
         });
 
-        // Simple online count simulation based on active presence collection
-        const presenceQ = query(collection(db, 'presence'));
-        const unsubscribePresence = onSnapshot(presenceQ, (snapshot) => {
-            const activeUsers = snapshot.docs.filter(doc => doc.data().isOnline);
-            setOnlineCount(activeUsers.length);
+        // Listen to global room count
+        const roomRef = doc(db, 'meta', 'room');
+        const unsubscribeRoom = onSnapshot(roomRef, (doc) => {
+            if (doc.exists()) {
+                setOnlineCount(doc.data().count);
+            }
         });
 
         return () => {
             unsubscribe();
-            unsubscribePresence();
+            unsubscribeRoom();
         };
     }, []);
 
