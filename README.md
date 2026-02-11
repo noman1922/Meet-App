@@ -1,16 +1,46 @@
-# React + Vite
+# TeamSpace - Private Team Meeting App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, private team application with real-time chat, file sharing, and video calling.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **Frontend:** React (Vite), JavaScript, Plain CSS.
+- **Backend:** Firebase (Firestore, Storage, Anonymous Auth).
+- **Video:** Jitsi Meet External API.
+- **Hosting:** Vercel.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup Instructions
 
-## React Compiler
+### 1. Firebase Setup
+1. Create a new Firebase project at [console.firebase.google.com](https://console.firebase.google.com/).
+2. Enable **Anonymous Authentication** in the Auth section.
+3. Create a **Firestore Database** in test mode or with the provided rules.
+4. Create a **Storage Bucket**.
+5. Copy your Firebase config and paste it into a `.env` file (see `.env.example`).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. DNS & Vercel Deployment
+1. Push this repo to GitHub.
+2. Connect the repo to Vercel.
+3. Set Environment Variables in Vercel matching your `.env`.
+4. Add domain `meet.enkryx.com` in Vercel.
+5. Add a CNAME record in your DNS provider:
+   - **Type:** CNAME
+   - **Name:** meet
+   - **Value:** cname.vercel-dns.com
 
-## Expanding the ESLint configuration
+### 3. Local Development
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+- **Anonymous Auth:** No account needed, just a display name.
+- **Real-time Chat:** Messages sync instantly via Firestore.
+- **File Sharing:** Upload files up to 50MB.
+- **Presence:** See who's online in real-time.
+- **Video Calls:** High-quality Jitsi calls with no time limits.
+
+## Scripts
+- `npm run dev`: Start development server.
+- `npm run build`: Build for production.
+- `npm run preview`: Preview production build.
